@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards, UsePipes, V
 import { UpdateUser, User } from "./user.model";
 import { UserService } from "./user.service";
 import * as bcrypt from 'bcrypt';
-import { AuthGuard } from "src/guards/auth.guard";
+import { AuthGuard } from "./auth-guard.guard";
 
 @Controller('user')
 export class UserController {
