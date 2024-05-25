@@ -1,7 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UsePipes, ValidationPipe } from "@nestjs/common";
-import { User } from "./user.model";
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
+import { UpdateUser, User } from "./user.model";
 import { UserService } from "./user.service";
 import * as bcrypt from 'bcrypt';
+import { AuthGuard } from "src/guards/auth.guard";
 
 @Controller('user')
 export class UserController {
@@ -32,18 +33,20 @@ export class UserController {
     }
 
     @Put(':id')
+    @UseGuards(AuthGuard)
     @UsePipes(new ValidationPipe())
-    async editUser(@Param('id') id:number, @Body() postData:User): Promise<User> {
+    async editUser(@Param('id') id:number, @Body() postData:UpdateUser): Promise<User> {
         return this.userService.updateUser(id, postData);
     }
 
     @Delete(':id')
+    @UseGuards(AuthGuard)
     async deleteUser(@Param('id') id:number): Promise<User> {
         return this.userService.deleteUser(id);
     }
 
     @Post('login')
-    async loginUser(@Body('username') email:string, @Body('password') password:string ) {
-
+    async loginUser(@Body('username') username:string, @Body('password') password:string ) {
+        return this.userService.findUserLogin(username, password)
     }
 }

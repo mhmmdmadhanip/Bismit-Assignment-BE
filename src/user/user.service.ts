@@ -1,5 +1,5 @@
 import { PrismaService } from "src/prisma.service";
-import { User } from "./user.model";
+import { UpdateUser, User } from "./user.model";
 import { Injectable } from "@nestjs/common";
 import * as bcrypt from 'bcrypt';
 
@@ -23,7 +23,7 @@ export class UserService {
         })
     }
 
-    async updateUser(id: number, data: User): Promise <User> {
+    async updateUser(id: number, data: UpdateUser): Promise <User> {
         return this.prisma.user.update({
             where: {id: Number(id)},
             data: {

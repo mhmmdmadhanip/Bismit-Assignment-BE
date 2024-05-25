@@ -19,3 +19,11 @@ export class User implements Prisma.UserCreateInput {
     @IsPhoneNumber('ID')
     phonenumber: string;
 }
+
+export class UpdateUser {
+    @IsNotEmpty()
+    fullname: string;
+
+    @IsPhoneNumber('ID')
+    phonenumber: string;
+}
