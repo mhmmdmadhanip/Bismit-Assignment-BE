@@ -1,7 +1,15 @@
 import { PrismaService } from "src/prisma.service";
 import { UpdateUser, User } from "./user.model";
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 import * as bcrypt from 'bcrypt';
+import { Response } from 'express';
+
+interface CookieOptions {
+    httpOnly: boolean;
+    maxAge: number;
+    secure: boolean;
+    sameSite: 'strict' | 'lax' | 'none' | boolean;
+}
 
 @Injectable()
 export class UserService {
@@ -24,13 +32,14 @@ export class UserService {
     }
 
     async updateUser(id: number, data: UpdateUser): Promise <User> {
-        return this.prisma.user.update({
+        const updateUser = this.prisma.user.update({
             where: {id: Number(id)},
             data: {
                 fullname: data.fullname,
                 phonenumber: data.phonenumber,
             }
         })
+        return updateUser;
     }
 
     async deleteUser(id: number): Promise<User> {
@@ -40,7 +49,7 @@ export class UserService {
         })
     }
 
-    async findUserLogin(username: string, password: string): Promise<User | null>{
+    async findUserLogin(username: string, password: string): Promise<User | null> {
         const user = await this.prisma.user.findUnique({
             where: {
                 username: username,
@@ -49,10 +58,10 @@ export class UserService {
 
         // If user doesn't exist or password doesn't match, return null
         if (!user || !(await bcrypt.compare(password, user.password))) {
-            return null;
+            throw new BadRequestException('Invalid Credentials');
         }
 
-        // If the username and password match, return the user
+        // Return the user
         return user;
     }
 }

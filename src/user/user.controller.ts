@@ -1,8 +1,10 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
+import { BadRequestException, Body, Controller, Delete, Get, Param, Post, Put, Res, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
 import { UpdateUser, User } from "./user.model";
 import { UserService } from "./user.service";
 import * as bcrypt from 'bcrypt';
 import { AuthGuard } from "./auth-guard.guard";
+import { Response } from 'express';
+
 
 @Controller('user')
 export class UserController {
@@ -33,20 +35,53 @@ export class UserController {
     }
 
     @Put(':id')
-    @UseGuards(AuthGuard)
+    // @UseGuards(AuthGuard)
     @UsePipes(new ValidationPipe())
-    async editUser(@Param('id') id:number, @Body() postData:UpdateUser): Promise<User> {
-        return this.userService.updateUser(id, postData);
+    async editUser(@Param('id') id:number, @Body() postData:UpdateUser) {
+        try {
+        const user = await this.userService.updateUser(id, postData);
+        if (!user) {
+            throw new BadRequestException('Invalid credentials');
+          }
+          return {
+            user: {
+              id: user.id,
+              username: user.username,
+              fullname: user.fullname,
+              phonenumber: user.phonenumber,
+            },
+          };
+        } catch (error) {
+          throw new BadRequestException(error.message);
+        }
     }
 
     @Delete(':id')
-    @UseGuards(AuthGuard)
+    // @UseGuards(AuthGuard)
     async deleteUser(@Param('id') id:number): Promise<User> {
         return this.userService.deleteUser(id);
     }
 
     @Post('login')
-    async loginUser(@Body('username') username:string, @Body('password') password:string ) {
-        return this.userService.findUserLogin(username, password)
-    }
+    async loginUser(
+        @Body('username') username: string,
+        @Body('password') password: string,
+      ) {
+        try {
+          const user = await this.userService.findUserLogin(username, password);
+          if (!user) {
+            throw new BadRequestException('Invalid credentials');
+          }
+          return {
+            user: {
+              id: user.id,
+              username: user.username,
+              fullname: user.fullname,
+              phonenumber: user.phonenumber,
+            },
+          };
+        } catch (error) {
+          throw new BadRequestException(error.message);
+        }
+      }
 }
