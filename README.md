@@ -1,5 +1,3 @@
-Certainly! Here is the `README.md` content formatted with clear line breaks for readability:
-
 ```markdown
 # Bismit Assignment BE
 
