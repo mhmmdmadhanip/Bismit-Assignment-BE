@@ -3,7 +3,6 @@ import { UpdateUser, User } from "./user.model";
 import { UserService } from "./user.service";
 import * as bcrypt from 'bcrypt';
 import { AuthGuard } from "./auth-guard.guard";
-import { Response } from 'express';
 
 
 @Controller('user')
@@ -12,11 +11,13 @@ export class UserController {
     constructor(private readonly userService: UserService){}
 
     @Get()
+    // @UseGuards(AuthGuard)
     async getAllUser(): Promise<User[]> {
         return this.userService.getAllUser()
     }
     
     @Get(':id')
+    @UseGuards(AuthGuard)
     async getUserById(@Param('id') id:number): Promise<User | null> {
         return this.userService.getUser(id);
     }
@@ -35,7 +36,7 @@ export class UserController {
     }
 
     @Put(':id')
-    // @UseGuards(AuthGuard)
+    @UseGuards(AuthGuard)
     @UsePipes(new ValidationPipe())
     async editUser(@Param('id') id:number, @Body() postData:UpdateUser) {
         try {
@@ -57,7 +58,7 @@ export class UserController {
     }
 
     @Delete(':id')
-    // @UseGuards(AuthGuard)
+    @UseGuards(AuthGuard)
     async deleteUser(@Param('id') id:number): Promise<User> {
         return this.userService.deleteUser(id);
     }
