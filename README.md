@@ -1,4 +1,3 @@
-```markdown
 # Bismit Assignment BE
 
 This repository contains the backend code for the Bismit assignment. To set up and run the project, follow these steps:
@@ -36,4 +35,3 @@ You can access the frontend application via this link: [Bismit Assignment Fronte
 
 
 Happy coding!
-```
