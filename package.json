@@ -7,7 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "postinstall": "prisma generate",
-    "build": "prisma generate && npm install",
+    "build": "prisma generate && pnpm install",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
@@ -31,6 +31,7 @@
     "class-validator": "^0.14.1",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.4.5",
+    "prisma": "^5.14.0",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1"
   },
