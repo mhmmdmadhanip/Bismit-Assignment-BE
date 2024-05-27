@@ -1,38 +1,32 @@
-import { PrismaService } from "src/prisma.service";
 import { UpdateUser, User } from "./user.model";
 import { BadRequestException, Injectable } from "@nestjs/common";
 import * as bcrypt from 'bcrypt';
 import { Response } from 'express';
+import { DatabaseService } from "src/database/database.service";
 
-interface CookieOptions {
-    httpOnly: boolean;
-    maxAge: number;
-    secure: boolean;
-    sameSite: 'strict' | 'lax' | 'none' | boolean;
-}
 
 @Injectable()
 export class UserService {
-    constructor (private prisma: PrismaService) {}
+    constructor (private readonly data: DatabaseService) {}
     
     async getAllUser(): Promise<User[]> {
-        return this.prisma.user.findMany()
+        return this.data.user.findMany()
     }
 
     async getUser(id:number): Promise<User | null> {
-        return this.prisma.user.findUnique({
+        return this.data.user.findUnique({
             where: {id:Number(id)}
         })
     } 
 
     async createUser(data: User): Promise <User> {
-        return this.prisma.user.create ({
+        return this.data.user.create ({
             data
         })
     }
 
     async updateUser(id: number, data: UpdateUser): Promise <User> {
-        const updateUser = this.prisma.user.update({
+        const updateUser = this.data.user.update({
             where: {id: Number(id)},
             data: {
                 fullname: data.fullname,
@@ -43,14 +37,14 @@ export class UserService {
     }
 
     async deleteUser(id: number): Promise<User> {
-        return this.prisma.user.delete({
+        return this.data.user.delete({
             where: {id: Number(id)},
 
         })
     }
 
     async findUserLogin(username: string, password: string): Promise<User | null> {
-        const user = await this.prisma.user.findUnique({
+        const user = await this.data.user.findUnique({
             where: {
                 username: username,
             },
