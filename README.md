@@ -33,5 +33,7 @@ You can access the frontend application via this link: [Bismit Assignment Fronte
 - If you encounter any issues, verify that your `.env` file is in the root directory and correctly formatted, ensure that the PostgreSQL database is accessible and the URL is correct, and check the console for any error messages.
 - For further assistance, feel free to open an issue in the repository.
 
+## Note
+I already deployed this repository, please use the [Bismit Assignment Frontend](https://bismit-assignment-fe.vercel.app/). The frontend web application is the primary interface for running and testing the backend functionality.
 
 Happy coding!
